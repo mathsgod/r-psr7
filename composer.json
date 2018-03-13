@@ -7,9 +7,10 @@
         }
     },
     "require": {
-        "psr/http-message": "1.0.x"
+        "psr/http-message": "1.0.*"
     },
     "type": "library",
     "license": "proprietary",
-    "minimum-stability": "stable"
+    "minimum-stability": "stable",
+    "version": "1.0.0"
 }
