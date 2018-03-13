@@ -19,10 +19,10 @@ class ServerRequest extends Request implements ServerRequestInterface
     public function __construct($method, $uri, array $headers = [], $body = null, $version = '1.1', $serverParams = [])
     {
         parse_str($uri->getQuery(), $this->queryParams);
-        $this->serverParams=$serverParams;
+        $this->serverParams = $serverParams;
         parent::__construct($method, $uri, $headers, $body, $version);
-        if(strstr($this->getHeader("Content-Type"),"application/json")==0){
-            $this->parsedBody=json_decode(file_get_contents("php://input"),true);
+        if (strstr($this->getHeader("Content-Type"), "application/json") == 0) {
+            $this->parsedBody = json_decode(file_get_contents("php://input"), true);
         }
     }
 
@@ -69,7 +69,7 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     public function getQueryParams()
     {
-        parse_str($this->getUri()->getQuery(),$this->queryParams);
+        parse_str($this->getUri()->getQuery(), $this->queryParams);
         return $this->queryParams;
     }
 
@@ -90,7 +90,7 @@ class ServerRequest extends Request implements ServerRequestInterface
         return $this->uploadedFiles;
     }
 
-     /**
+    /**
      * Return an instance with the specified cookies.
      *
      * The data IS NOT REQUIRED to come from the $_COOKIE superglobal, but MUST
@@ -109,13 +109,13 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     public function withCookieParams(array $cookies)
     {
-        $clone=clone $this;
+        $clone = clone $this;
         $clone = clone $this;
         $clone->cookies = $cookies;
         return $clone;
     }
 
-   /**
+    /**
      * Return an instance with the specified query string arguments.
      *
      * These values SHOULD remain immutable over the course of the incoming
@@ -140,7 +140,7 @@ class ServerRequest extends Request implements ServerRequestInterface
     public function withQueryParams(array $query)
     {
         $clone = clone $this;
-        $uri=$clone->getUri()->withQuery(http_build_query($query));
+        $uri = $clone->getUri()->withQuery(http_build_query($query));
         return $clone->withUri($uri);
     }
 
@@ -179,19 +179,19 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     public function getParsedBody()
     {
-        
-        if(strpos($this->getHeader("Content-Type")[0],"application/x-www-form-urlencoded")!==false){
-            return $_POST;            
+
+        if (strpos($this->getHeader("Content-Type")[0], "application/x-www-form-urlencoded") !== false) {
+            return $_POST;
         }
 
-        if(strpos($this->getHeader("Content-Type")[0],"multipart/form-data")!==false){
-            return $_POST;            
+        if (strpos($this->getHeader("Content-Type")[0], "multipart/form-data") !== false) {
+            return $_POST;
         }
-        
+
         return $this->parsedBody;
     }
 
-/**
+    /**
      * Return an instance with the specified body parameters.
      *
      * These MAY be injected during instantiation.
@@ -259,7 +259,7 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     public function getAttribute($name, $default = null)
     {
-        return $this->attributes[$name]?$this->attributes[$name]:$default;
+        return $this->attributes[$name] ? $this->attributes[$name] : $default;
     }
 
     /**
@@ -280,7 +280,7 @@ class ServerRequest extends Request implements ServerRequestInterface
     public function withAttribute($name, $value)
     {
         $clone = clone $this;
-        $clone->attributes[$name]=$value;
+        $clone->attributes[$name] = $value;
         return $clone;
     }
 
@@ -301,53 +301,55 @@ class ServerRequest extends Request implements ServerRequestInterface
     public function withoutAttribute($name)
     {
         $clone = clone $this;
-        $clone->attributes=[];
+        $clone->attributes = [];
         return $clone;
     }
 
     public static function FromEnv()
     {
-        $request=new ServerRequest(
+
+        $request = new ServerRequest(
             $_SERVER["REQUEST_METHOD"],
             Uri::createFromEnvironment($_SERVER),
             getallheaders(),
             new Stream(fopen("php://input", "r")),
             explode("/", $_SERVER["SERVER_PROTOCOL"])[1],
-            $_SERVER);
+            $_SERVER
+        );
 
         if ($_FILES) {
-            $parseUploadedFile=function ($files) use (&$parseUploadedFile) {
-                $data=[];
+            $parseUploadedFile = function ($files) use (&$parseUploadedFile) {
+                $data = [];
                 foreach ($files as $name => $file) {
                     if (!isset($file["error"])) {
                         if (is_array($file)) {
-                            $data[$name]=$parseUploadedFile($file);
+                            $data[$name] = $parseUploadedFile($file);
                         }
                         continue;
                     }
-                    $data[$name]=[];
+                    $data[$name] = [];
                     if (!is_array($file["error"])) {
-                        $data[$name]=new UploadedFile( new Stream(fopen($file["tmp_name"], "r")), $file["size"], $file["error"], $file["name"], $file["type"] );
+                        $data[$name] = new UploadedFile(new Stream(fopen($file["tmp_name"], "r")), $file["size"], $file["error"], $file["name"], $file["type"]);
                     } else {
-                        $child=[];
+                        $child = [];
                         foreach ($file['error'] as $id => $error) {
-                            $child[$id]['name']=$file['name'][$id];
-                            $child[$id]['type']=$file['type'][$id];
-                            $child[$id]['tmp_name']=$file['tmp_name'][$id];
-                            $child[$id]['error']=$file['error'][$id];
-                            $child[$id]['size']=$file['size'][$id];
+                            $child[$id]['name'] = $file['name'][$id];
+                            $child[$id]['type'] = $file['type'][$id];
+                            $child[$id]['tmp_name'] = $file['tmp_name'][$id];
+                            $child[$id]['error'] = $file['error'][$id];
+                            $child[$id]['size'] = $file['size'][$id];
                         }
-                        $data[$name]=$parseUploadedFile($child);
+                        $data[$name] = $parseUploadedFile($child);
                     }
                 }
                 return $data;
             };
-            
-            $request= $request->withUploadedFiles($parseUploadedFile($_FILES));
+
+            $request = $request->withUploadedFiles($parseUploadedFile($_FILES));
         }
 
-        if(strpos($request->getHeader("Content-Type")[0],"application/json")!==false){
-            $_POST=json_decode(file_get_contents("php://input"),true);
+        if (strpos($request->getHeader("Content-Type")[0], "application/json") !== false) {
+            $_POST = json_decode(file_get_contents("php://input"), true);
         }
 
         return $request;

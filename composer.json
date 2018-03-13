@@ -3,14 +3,13 @@
     "description": "psr7",
     "autoload": {
         "psr-4": {
-            "R\\Psr7\\": ""  
+            "R\\Psr7\\": ""
         }
-    },"require": {
+    },
+    "require": {
         "psr/http-message": "1.0.x"
     },
     "type": "library",
     "license": "proprietary",
-    "minimum-stability": "stable",
-    "version": "1.0.7"
-
+    "minimum-stability": "stable"
 }

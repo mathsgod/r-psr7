@@ -84,11 +84,17 @@ class Uri implements UriInterface
         $requestScriptDir = dirname($requestScriptName);
 
         $basePath=dirname($env["SCRIPT_NAME"]);
-        if ($basePath!="/") {
+
+        
+        if ($basePath!=DIRECTORY_SEPARATOR) {
             $basePath=$basePath."/";
+        }else{
+            $basePath="/";
         }
+
         
         $requestUri = parse_url('http://example.com' . $env['REQUEST_URI'], PHP_URL_PATH);
+
         $virtualPath=substr($requestUri, strlen($basePath));
         
         // Query string
