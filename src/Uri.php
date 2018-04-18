@@ -84,14 +84,9 @@ class Uri implements UriInterface
         $requestScriptDir = dirname($requestScriptName);
 
         $basePath=dirname($env["SCRIPT_NAME"]);
-
-        
-        if ($basePath!=DIRECTORY_SEPARATOR) {
-            $basePath=$basePath."/";
-        }else{
-            $basePath="/";
+        if($basePath==DIRECTORY_SEPARATOR){
+            $basePath="";
         }
-
         
         $requestUri = parse_url('http://example.com' . $env['REQUEST_URI'], PHP_URL_PATH);
 
@@ -287,7 +282,7 @@ class Uri implements UriInterface
         $path = $this->getPath();
         $query = $this->getQuery();
         $fragment = $this->getFragment();
-        $path = $basePath .  ltrim($path, '/');
+        $path = $basePath . $path;
 
         return ($scheme ? $scheme . ':' : '')
         . ($authority ? '//' . $authority : '')

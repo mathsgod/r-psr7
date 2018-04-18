@@ -3,14 +3,17 @@
     "description": "psr7",
     "autoload": {
         "psr-4": {
-            "R\\Psr7\\": ""
+            "R\\Psr7\\": "src/"
         }
     },
     "require": {
-        "psr/http-message": "1.0.*"
+        "psr/http-message": "1.*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*"
     },
     "type": "library",
     "license": "proprietary",
     "minimum-stability": "stable",
-    "version": "1.0.0"
+    "version": "2.0.0"
 }
