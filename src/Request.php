@@ -11,21 +11,22 @@ class Request extends Message implements RequestInterface
 {
     protected $method;
     protected $uri;
-    
-    public function __construct($method, $uri, array $headers = [], $body = null, $version = '1.1')
+
+    public function __construct($method, Uri $uri, array $headers = [], $body = null, $version = '1.1')
     {
-        $this->method=$method;
-        $this->uri=$uri;
-        $this->requestTarget=
-        parent::__construct($headers,$body,$version);
+        $this->method = $method;
+        $this->uri = $uri;
+
+        parent::__construct($headers, $body, $version);
 
     }
 
-    public function get($name){
-        parse_str($this->uri->getQuery(),$arr);
+    public function get($name)
+    {
+        parse_str($this->uri->getQuery(), $arr);
         return $arr[$name];
     }
-    
+
     public function getRequestTarget()
     {
         if ($this->requestTarget !== null) {
@@ -76,7 +77,7 @@ class Request extends Message implements RequestInterface
         $clone->uri = $uri;
         if (!$preserveHost) {
             if ($uri->getHost() !== '') {
-                $clone->header["Host"]=[ $uri->getHost()];
+                $clone->header["Host"] = [$uri->getHost()];
 
             }
         } else {
@@ -92,8 +93,8 @@ class Request extends Message implements RequestInterface
     {
 
         $accepts = [];
-        foreach($this->getHeader("Accept") as $a){
-            $ss=explode(";",$a,2);
+        foreach ($this->getHeader("Accept") as $a) {
+            $ss = explode(";", $a, 2);
             $accepts[] = ["media" => $ss[0], "params" => $ss[1]];
         }
         return $accepts;

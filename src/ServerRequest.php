@@ -16,7 +16,7 @@ class ServerRequest extends Request implements ServerRequestInterface
     protected $serverParams;
     protected $uploadedFiles = [];
 
-    public function __construct($method, $uri, array $headers = [], $body = null, $version = '1.1', $serverParams = [])
+    public function __construct($method, Uri $uri, array $headers = [], $body = null, $version = '1.1', $serverParams = [])
     {
         parse_str($uri->getQuery(), $this->queryParams);
         $this->serverParams = $serverParams;

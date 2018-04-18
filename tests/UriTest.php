@@ -7,6 +7,11 @@ use R\Psr7\Uri;
 
 final class UriTest extends TestCase
 {
+    public function test_port(){
+        $uri=Uri::createFromEnvironment($_SERVER);
+        $this->assertNull($uri->getPort());
+    }
+
     public function testCreateFromString()
     {
         $uri = Uri::createFromString("http://raymond2.hostlink.com.hk/testing/download?a=1&b=2&c=3#hash/x/1");

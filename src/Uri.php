@@ -36,7 +36,7 @@ class Uri implements UriInterface
     }
 
 
-    public static function createFromString($uri)
+    public static function CreateFromString($uri)
     {
         $parts = parse_url($uri);
         $scheme = isset($parts['scheme']) ? $parts['scheme'] : '';
@@ -50,7 +50,7 @@ class Uri implements UriInterface
         return new static($scheme, $host, $port, $path, $query, $fragment, $user, $pass);
     }
 
-    public static function createFromEnvironment($env)
+    public static function CreateFromEnvironment($env)
     {
         // Scheme
         $isSecure = $env["HTTPS"];
@@ -77,6 +77,9 @@ class Uri implements UriInterface
                 $port = (int) substr($host, $pos + 1);
                 $host = strstr($host, ':', true);
             }
+        }
+        if($port==0){
+            $port=null;
         }
 
         // Path
