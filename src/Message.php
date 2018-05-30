@@ -13,16 +13,22 @@ class Message implements MessageInterface
 
     protected $body;
 
-    public function __construct($headers, $body, $version = "1.1")
+    public function __construct($headers=[], $body, $version = "1.1")
     {
-        foreach ($headers as $name => $value) {
-            $this->headers[$name]=array_map("trim", explode(",", $value));
-        }
+        $this->headers = new Collection();
 
-        $this->body=$body;
-        $this->protocolVersion=$version;
+        foreach ($headers as $name => $value) {
+            foreach (array_map("trim", explode(",", $value)) as $v) {
+                $this->headers->add(strtolower($name), [
+                    "name" => $name,
+                    "value" => $v
+                ]);
+            }
+        }
+        $this->body = $body;
+        $this->protocolVersion = $version;
     }
-    
+
     public function getProtocolVersion()
     {
         return $this->protocolVersion;
@@ -43,42 +49,52 @@ class Message implements MessageInterface
 
     public function getHeaders()
     {
-        return $this->headers;
+        $data = [];
+        foreach ($this->headers->all() as $values) {
+            foreach ($values as $value) {
+                $data[$value["name"]][] = $value["value"];
+            }
+        }
+        return $data;
+
     }
-    
+
     public function hasHeader($name)
     {
-        return (bool)$this->headers[$name];
+        return $this->headers->has(strtolower($name));
     }
 
     public function getHeader($name)
     {
-        return $this->headers[$name];
+        return array_map(function ($v) {
+            return $v["value"];
+        }, $this->headers->get(strtolower($name)));
     }
 
     public function getHeaderLine($name)
     {
-        return implode(',', $this->headers["name"]);
+        return implode(",",$this->getHeader($name));
     }
 
     public function withHeader($name, $value)
     {
         $clone = clone $this;
-        $clone->headers[$name]=[$value];
+        $clone->headers->remove(strtolower($name));
+        $clone->headers->add(strtolower($name), ["name" => $name, "value" => $value]);
         return $clone;
     }
 
     public function withAddedHeader($name, $value)
     {
         $clone = clone $this;
-        $clone->headers[$name][]=$value;
+        $clone->headers->add(strtolower($name), ["name" => $name, "value" => $value]);
         return $clone;
     }
 
     public function withoutHeader($name)
     {
         $clone = clone $this;
-        unset($clone->headers[$name]);
+        $clone->headers->remove(strtolower($name));
         return $clone;
     }
 
@@ -99,12 +115,13 @@ class Message implements MessageInterface
 
     public function setHeader($name, $value)
     {
-        
-        $this->headers[$name]=[$value];
+        $this->headers->remove(strtolower($name));
+        $this->headers->add(strtolower($name), ["name" => $name, "value" => $value]);
         return $this;
     }
 
-    public function __toString(){
+    public function __toString()
+    {
         return (string)$this->body;
     }
 }
