@@ -29,6 +29,10 @@ class Message implements MessageInterface
         $this->protocolVersion = $version;
     }
 
+    public function __clone(){
+        $this->headers=clone $this->headers;
+    }
+
     public function getProtocolVersion()
     {
         return $this->protocolVersion;
