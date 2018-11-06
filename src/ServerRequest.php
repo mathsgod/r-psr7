@@ -69,8 +69,12 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     public function getQueryParams()
     {
-        parse_str($this->getUri()->getQuery(), $this->queryParams);
-        return $this->queryParams;
+        parse_str($this->getUri()->getQuery(), $p);
+        foreach($this->queryParams as $k=>$v){
+            $p[$k]=$v;
+        }
+     
+        return $p;
     }
 
     /**
@@ -141,6 +145,7 @@ class ServerRequest extends Request implements ServerRequestInterface
     {
         $clone = clone $this;
         $uri = $clone->getUri()->withQuery(http_build_query($query));
+        $clone->queryParams=array_merge($clone->queryParams,$query);
         return $clone->withUri($uri);
     }
 
