@@ -13,7 +13,7 @@ class Message implements MessageInterface
 
     protected $body;
 
-    public function __construct($headers=[], $body, $version = "1.1")
+    public function __construct($headers = [], $body, $version = "1.1")
     {
         $this->headers = new Collection();
 
@@ -29,8 +29,9 @@ class Message implements MessageInterface
         $this->protocolVersion = $version;
     }
 
-    public function __clone(){
-        $this->headers=clone $this->headers;
+    public function __clone()
+    {
+        $this->headers = clone $this->headers;
     }
 
     public function getProtocolVersion()
@@ -70,6 +71,9 @@ class Message implements MessageInterface
 
     public function getHeader($name)
     {
+        if (!$this->hasHeader($name)) {
+            return [];
+        }
         return array_map(function ($v) {
             return $v["value"];
         }, $this->headers->get(strtolower($name)));
@@ -77,7 +81,7 @@ class Message implements MessageInterface
 
     public function getHeaderLine($name)
     {
-        return implode(",",$this->getHeader($name));
+        return implode(",", $this->getHeader($name));
     }
 
     public function withHeader($name, $value)

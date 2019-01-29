@@ -53,11 +53,11 @@ class Uri implements UriInterface
     public static function CreateFromEnvironment($env)
     {
         // Scheme
-        $isSecure = $env["HTTPS"];
+        $isSecure = isset($env["HTTPS"]) ? $env["HTTPS"] : null;
         $scheme = (empty($isSecure) || $isSecure === 'off') ? 'http' : 'https';
         // Authority: Username and password
-        $username = $env['PHP_AUTH_USER'];
-        $password = $env['PHP_AUTH_PW'];
+        $username = isset($env['PHP_AUTH_USER']) ? $env['PHP_AUTH_USER'] : null;
+        $password = isset($env['PHP_AUTH_PW']) ? $evn['PHP_AUTH_PW'] : null;
         // Authority: Host
         if ($env['HTTP_HOST']) {
             $host = $env['HTTP_HOST'];
@@ -69,31 +69,31 @@ class Uri implements UriInterface
         if (preg_match('/^(\[[a-fA-F0-9:.]+\])(:\d+)?\z/', $host, $matches)) {
             $host = $matches[1];
             if (isset($matches[2])) {
-                $port = (int) substr($matches[2], 1);
+                $port = (int)substr($matches[2], 1);
             }
         } else {
             $pos = strpos($host, ':');
             if ($pos !== false) {
-                $port = (int) substr($host, $pos + 1);
+                $port = (int)substr($host, $pos + 1);
                 $host = strstr($host, ':', true);
             }
         }
-        if($port==0){
-            $port=null;
+        if ($port == 0) {
+            $port = null;
         }
 
         // Path
         $requestScriptName = parse_url($env['SCRIPT_NAME'], PHP_URL_PATH);
         $requestScriptDir = dirname($requestScriptName);
 
-        $basePath=dirname($env["SCRIPT_NAME"]);
-        if($basePath==DIRECTORY_SEPARATOR){
-            $basePath="";
+        $basePath = dirname($env["SCRIPT_NAME"]);
+        if ($basePath == DIRECTORY_SEPARATOR) {
+            $basePath = "";
         }
-        
+
         $requestUri = parse_url('http://example.com' . $env['REQUEST_URI'], PHP_URL_PATH);
 
-        $virtualPath=substr($requestUri, strlen($basePath));
+        $virtualPath = substr($requestUri, strlen($basePath));
         
         // Query string
         $queryString = $env['QUERY_STRING'];
@@ -114,8 +114,8 @@ class Uri implements UriInterface
             throw new InvalidArgumentException('Uri path must be a string');
         }
         $clone = clone $this;
-        $clone->basePath=$basePath;
-        
+        $clone->basePath = $basePath;
+
         return $clone;
     }
 
@@ -180,10 +180,10 @@ class Uri implements UriInterface
         $userInfo = $this->getUserInfo();
         $host = $this->getHost();
         $port = $this->getPort();
-        if (($this->port==80 && $this->scheme=='http')|| ($this->port==443 && $this->scheme=='https')) {
-            $port=null;
+        if (($this->port == 80 && $this->scheme == 'http') || ($this->port == 443 && $this->scheme == 'https')) {
+            $port = null;
         }
-        
+
         return ($userInfo ? $userInfo . '@' : '') . $host . ($port !== null ? ':' . $port : '');
     }
     public function getUserInfo()
@@ -235,7 +235,7 @@ class Uri implements UriInterface
         return $clone;
     }
 
- 
+
     public function withPath($path)
     {
         if (!is_string($path)) {
@@ -244,11 +244,11 @@ class Uri implements UriInterface
         $clone = clone $this;
         // if the path is absolute
         if (substr($path, 0, 1) == '/') {
-            if (substr($path, 0, strlen($this->basePath))==$this->basePath) {
-                $path=substr($path, strlen($this->basePath));
+            if (substr($path, 0, strlen($this->basePath)) == $this->basePath) {
+                $path = substr($path, strlen($this->basePath));
             } else {
                 $clone->basePath = '/';
-                $path=substr($path, 1);
+                $path = substr($path, 1);
             }
         }
 
@@ -288,10 +288,10 @@ class Uri implements UriInterface
         $path = $basePath . $path;
 
         return ($scheme ? $scheme . ':' : '')
-        . ($authority ? '//' . $authority : '')
-        . $path
-        . ($query ? '?' . $query : '')
-        . ($fragment ? '#' . $fragment : '');
+            . ($authority ? '//' . $authority : '')
+            . $path
+            . ($query ? '?' . $query : '')
+            . ($fragment ? '#' . $fragment : '');
     }
 
     public function getBasePath()

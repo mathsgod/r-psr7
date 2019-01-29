@@ -21,8 +21,11 @@ class ServerRequest extends Request implements ServerRequestInterface
         parse_str($uri->getQuery(), $this->queryParams);
         $this->serverParams = $serverParams;
         parent::__construct($method, $uri, $headers, $body, $version);
-        if (strstr($this->getHeader("Content-Type"), "application/json") == 0) {
-            $this->parsedBody = json_decode(file_get_contents("php://input"), true);
+        foreach ($this->getHeader("Content-Type") as $value) {
+            if (strstr($value, "application/json") == 0) {
+                $this->parsedBody = json_decode(file_get_contents("php://input"), true);
+                break;
+            }
         }
     }
 
@@ -70,10 +73,10 @@ class ServerRequest extends Request implements ServerRequestInterface
     public function getQueryParams()
     {
         parse_str($this->getUri()->getQuery(), $p);
-        foreach($this->queryParams as $k=>$v){
-            $p[$k]=$v;
+        foreach ($this->queryParams as $k => $v) {
+            $p[$k] = $v;
         }
-     
+
         return $p;
     }
 
@@ -145,7 +148,7 @@ class ServerRequest extends Request implements ServerRequestInterface
     {
         $clone = clone $this;
         $uri = $clone->getUri()->withQuery(http_build_query($query));
-        $clone->queryParams=array_merge($clone->queryParams,$query);
+        $clone->queryParams = array_merge($clone->queryParams, $query);
         return $clone->withUri($uri);
     }
 
@@ -353,8 +356,11 @@ class ServerRequest extends Request implements ServerRequestInterface
             $request = $request->withUploadedFiles($parseUploadedFile($_FILES));
         }
 
-        if (strpos($request->getHeader("Content-Type")[0], "application/json") !== false) {
-            $_POST = json_decode(file_get_contents("php://input"), true);
+        foreach ($request->getHeader("Content-Type") as $value) {
+            if (strpos($value, "application/json") !== false) {
+                $_POST = json_decode(file_get_contents("php://input"), true);
+                break;
+            }
         }
 
         return $request;
