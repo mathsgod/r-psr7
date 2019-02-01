@@ -81,11 +81,11 @@ class Response extends Message implements ResponseInterface
         599 => 'Network Connect Timeout Error',
     ];
 
-    public function __construct($status, $headers, $body = null, $version = '1.1')
+    public function __construct($status, $headers = [], $body = null, $version = '1.1')
     {
-        $this->status=$status;
-        if ($body===null) {
-            $body=new Stream(fopen("php://memory", "r+"));
+        $this->status = $status;
+        if ($body === null) {
+            $body = new Stream(fopen("php://memory", "r+"));
         }
         parent::__construct($headers, $body, $version);
     }

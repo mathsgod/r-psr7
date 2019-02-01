@@ -25,7 +25,12 @@ class Message implements MessageInterface
                 ]);
             }
         }
+
+        if ($body === null) {
+            $body = new Stream(fopen("php://memory", "r+"));
+        }
         $this->body = $body;
+
         $this->protocolVersion = $version;
     }
 
