@@ -13,7 +13,7 @@ class Message implements MessageInterface
 
     protected $body;
 
-    public function __construct($headers = [], $body, $version = "1.1")
+    public function __construct($headers = [], $body = null, $version = "1.1")
     {
         $this->headers = new Collection();
 
