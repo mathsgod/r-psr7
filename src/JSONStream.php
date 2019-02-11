@@ -25,7 +25,7 @@ class JSONStream extends Stream
 
     public function __toString()
     {
-        parent::truncate();
+        parent::truncate($this->getSize());
         return json_encode($this->_data, JSON_UNESCAPED_UNICODE);
     }
 
