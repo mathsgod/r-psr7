@@ -4,11 +4,11 @@ namespace R\Psr7;
 
 class ObjectStream extends Stream
 {
-    protected $_data=[];
+    protected $_data = [];
 
     public function write($obj)
     {
-        $this->_data[]=$obj;
+        $this->_data[] = $obj;
     }
 
     public function getContents()
@@ -20,8 +20,8 @@ class ObjectStream extends Stream
         return parent::getContents();
     }
 
-    public function truncate($size)
+    public function truncate($size = null)
     {
-        $this->_data=[];
+        $this->_data = [];
     }
 }
