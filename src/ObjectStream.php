@@ -13,7 +13,7 @@ class ObjectStream extends Stream
 
     public function getContents()
     {
-        parent::truncate();
+        parent::truncate($this->getSize());
         foreach ($this->_data as $obj) {
             parent::write((string)$obj);
         }

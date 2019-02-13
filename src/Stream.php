@@ -30,15 +30,15 @@ class Stream implements StreamInterface
             'x+t' => true, 'c+t' => true, 'a' => true, 'a+' => true
         ]
     ];
-    
-    public function __construct($stream, $options = [])
+
+    public function __construct($stream = null, $options = [])
     {
-        if($stream==null){
-            $stream=fopen("php://memory","r+");
-        }elseif(is_string($stream)){
-            $str=$stream;
-            $stream=fopen("php://memory","r+");
-            fwrite($stream,$str);
+        if ($stream == null) {
+            $stream = fopen("php://memory", "r+");
+        } elseif (is_string($stream)) {
+            $str = $stream;
+            $stream = fopen("php://memory", "r+");
+            fwrite($stream, $str);
         }
 
         if (!is_resource($stream)) {
@@ -89,7 +89,7 @@ class Stream implements StreamInterface
         if (!isset($this->stream)) {
             return null;
         }
-        
+
         $oldResource = $this->stream;
         $this->stream = null;
         $this->meta = null;
@@ -237,6 +237,6 @@ class Stream implements StreamInterface
 
     public function truncate($size)
     {
-        return ftruncate($this->stream,$size);
+        return ftruncate($this->stream, $size);
     }
 }
