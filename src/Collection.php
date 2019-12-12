@@ -1,4 +1,5 @@
 <?
+
 namespace R\Psr7;
 
 class Collection
@@ -34,6 +35,4 @@ class Collection
     {
         unset($this->data[$key]);
     }
-
-
 }

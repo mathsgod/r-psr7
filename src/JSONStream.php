@@ -12,7 +12,6 @@ class JSONStream extends Stream
         parent::__construct(fopen("php://memory", "r+"), $options);
     }
 
-
     public function write($obj)
     {
         $this->_data = $obj;
