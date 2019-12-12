@@ -2,6 +2,7 @@
 
 namespace R\Psr7;
 
+use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
 
 class UploadedFile implements UploadedFileInterface
@@ -12,15 +13,15 @@ class UploadedFile implements UploadedFileInterface
     protected $clientFilename;
     protected $clientMediaType;
 
-    public function __construct($stream, $size, $error, $clientFilename = null, $clientMediaType = null)
+    public function __construct(StreamInterface $stream, $size, $error, string $clientFilename = null, string $clientMediaType = null)
     {
-        $this->stream=$stream;
-        $this->size=$size;
-        $this->error=$error;
-        $this->clientFilename=$clientFilename;
-        $this->clientMediaType=$clientMediaType;
+        $this->stream = $stream;
+        $this->size = $size;
+        $this->error = $error;
+        $this->clientFilename = $clientFilename;
+        $this->clientMediaType = $clientMediaType;
     }
-  /**
+    /**
      * Retrieve a stream representing the uploaded file.
      *
      * This method MUST return a StreamInterface instance, representing the
@@ -72,12 +73,12 @@ class UploadedFile implements UploadedFileInterface
      * @throws \RuntimeException on any error during the move operation, or on
      *     the second or subsequent call to the method.
      */
-    public function moveTo($targetPath)
+    public function moveTo(string $targetPath)
     {
-        
+
         move_uploaded_file($this->stream->getMetadata("uri"), $targetPath);
     }
-    
+
     /**
      * Retrieve the file size.
      *
@@ -91,7 +92,7 @@ class UploadedFile implements UploadedFileInterface
     {
         return $this->size;
     }
-    
+
     /**
      * Retrieve the error associated with the uploaded file.
      *
@@ -110,7 +111,7 @@ class UploadedFile implements UploadedFileInterface
     {
         return $this->error;
     }
-    
+
     /**
      * Retrieve the filename sent by the client.
      *
@@ -128,7 +129,7 @@ class UploadedFile implements UploadedFileInterface
     {
         return $this->clientFilename;
     }
-    
+
     /**
      * Retrieve the media type sent by the client.
      *

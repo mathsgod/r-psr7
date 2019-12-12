@@ -5,7 +5,6 @@ namespace R\Psr7;
 use \InvalidArgumentException;
 use \Psr\Http\Message\RequestInterface;
 use \Psr\Http\Message\UriInterface;
-use \Psr\Http\Message\StreamInterface;
 
 class Request extends Message implements RequestInterface
 {
@@ -18,7 +17,6 @@ class Request extends Message implements RequestInterface
         $this->uri = $uri;
 
         parent::__construct($headers, $body, $version);
-
     }
 
     public function get($name)
@@ -54,7 +52,7 @@ class Request extends Message implements RequestInterface
         return $clone;
     }
 
-    public function getUri()
+    public function getUri(): Uri
     {
         return $this->uri;
     }
@@ -77,18 +75,19 @@ class Request extends Message implements RequestInterface
         $clone->uri = $uri;
         if (!$preserveHost) {
             if ($uri->getHost() !== '') {
-                $clone->header["Host"] = [$uri->getHost()];
-
+                $clone->headers->remove("Host");
+                $clone->headers->add("Host", $uri->getHost());
             }
         } else {
             if ($uri->getHost() !== '' && (!$this->hasHeader('Host') || $this->getHeaderLine('Host') === '')) {
-                $clone->headers->set('Host', $uri->getHost());
+                $clone->headers->remove("Host");
+                $clone->headers->add("Host", $uri->getHost());
             }
         }
         return $clone;
     }
 
-//-----
+    //-----
     public function HttpAccept()
     {
 

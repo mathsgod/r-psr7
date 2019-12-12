@@ -3,13 +3,14 @@
 namespace R\Psr7;
 
 use \Psr\Http\Message\ResponseInterface;
+use InvalidArgumentException;
 
 class Response extends Message implements ResponseInterface
 {
     protected $status = 200;
     protected $reasonPhrase = '';
 
-    static $MESSAGES = [
+    const MESSAGES = [
         //Informational 1xx
         100 => 'Continue',
         101 => 'Switching Protocols',
@@ -103,8 +104,8 @@ class Response extends Message implements ResponseInterface
         }
         $clone = clone $this;
         $clone->status = $code;
-        if ($reasonPhrase === '' && isset(static::$MESSAGES[$code])) {
-            $reasonPhrase = static::$MESSAGES[$code];
+        if ($reasonPhrase === '' && isset(static::MESSAGES[$code])) {
+            $reasonPhrase = static::MESSAGES[$code];
         }
         if ($reasonPhrase === '') {
             throw new InvalidArgumentException('ReasonPhrase must be supplied for this code');
@@ -118,8 +119,8 @@ class Response extends Message implements ResponseInterface
         if ($this->reasonPhrase) {
             return $this->reasonPhrase;
         }
-        if (isset(static::$MESSAGES[$this->status])) {
-            return static::$MESSAGES[$this->status];
+        if (isset(static::MESSAGES[$this->status])) {
+            return static::MESSAGES[$this->status];
         }
         return '';
     }
