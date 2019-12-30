@@ -9,6 +9,15 @@ use R\Psr7\Uri;
 
 final class UriTest extends TestCase
 {
+    public function test_withPath()
+    {
+        $uri = Uri::createFromString("http://raymond2.hostlink.com.hk/cms/testing/download");
+        $uri = $uri->withBasePath("/cms");
+        $uri = $uri->withPath("abc/def");
+
+        $this->assertEquals("http://raymond2.hostlink.com.hk/cms/abc/def", (string) $uri);
+    }
+
     public function test_port()
     {
         $uri = Uri::createFromEnvironment($_SERVER);

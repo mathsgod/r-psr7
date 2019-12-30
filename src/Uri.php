@@ -112,7 +112,7 @@ class Uri implements UriInterface
         return $clone;
     }
 
-    protected function filterQuery($query):string 
+    protected function filterQuery($query): string
     {
         return preg_replace_callback(
             '/(?:[^a-zA-Z0-9_\-\.~!\$&\'\(\)\*\+,;=%:@\/\?]+|%(?![A-Fa-f0-9]{2}))/',
@@ -247,6 +247,8 @@ class Uri implements UriInterface
                 $clone->basePath = '/';
                 $path = substr($path, 1);
             }
+        } else {
+            $path = "/" . $path;
         }
 
         $clone->path = $this->filterPath($path);
