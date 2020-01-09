@@ -1,7 +1,7 @@
 <?
 
 declare(strict_types=1);
-error_reporting(E_ALL && ~E_WARNING && ~E_NOTICE);
+error_reporting(E_ALL & ~E_WARNING & ~E_NOTICE);
 
 use PHPUnit\Framework\TestCase;
 
