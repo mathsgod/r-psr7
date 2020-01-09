@@ -1,6 +1,6 @@
 <?
 declare (strict_types = 1);
-error_reporting(E_ALL && ~E_WARNING);
+//error_reporting(E_ALL && ~E_WARNING);
 use PHPUnit\Framework\TestCase;
 
 use R\Psr7\ObjectStream;
