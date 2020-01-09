@@ -73,7 +73,7 @@ class UploadedFile implements UploadedFileInterface
      * @throws \RuntimeException on any error during the move operation, or on
      *     the second or subsequent call to the method.
      */
-    public function moveTo(string $targetPath)
+    public function moveTo($targetPath)
     {
 
         move_uploaded_file($this->stream->getMetadata("uri"), $targetPath);
