@@ -1,7 +1,7 @@
 <?php
+
 namespace R\Psr7;
 
-use \InvalidArgumentException;
 use \Psr\Http\Message\MessageInterface;
 use \Psr\Http\Message\StreamInterface;
 
@@ -13,7 +13,7 @@ class Message implements MessageInterface
 
     protected $body;
 
-    public function __construct($headers = [], $body = null, $version = "1.1")
+    public function __construct(array $headers = [], $body = null, $version = "1.1")
     {
         $this->headers = new Collection();
 
@@ -46,7 +46,7 @@ class Message implements MessageInterface
 
     public function withProtocolVersion($version)
     {
-/*        if (!isset(self::$validProtocolVersions[$version])) {
+        /*        if (!isset(self::$validProtocolVersions[$version])) {
         throw new InvalidArgumentException(
             'Invalid HTTP version. Must be one of: '
             . implode(', ', array_keys(self::$validProtocolVersions))
@@ -66,7 +66,6 @@ class Message implements MessageInterface
             }
         }
         return $data;
-
     }
 
     public function hasHeader($name)
@@ -135,6 +134,6 @@ class Message implements MessageInterface
 
     public function __toString()
     {
-        return (string)$this->body;
+        return (string) $this->body;
     }
 }
