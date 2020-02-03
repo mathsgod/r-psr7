@@ -52,7 +52,10 @@ class Request extends Message implements RequestInterface
         return $clone;
     }
 
-    public function getUri(): Uri
+    /**
+     * @return Uri
+     */
+    public function getUri()
     {
         return $this->uri;
     }
