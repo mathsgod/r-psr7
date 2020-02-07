@@ -1,8 +1,8 @@
 <?php
+
 namespace R\Psr7;
 
 use RuntimeException;
-use InvalidArgumentException;
 use Psr\Http\Message\StreamInterface;
 
 class Stream implements StreamInterface
@@ -16,7 +16,7 @@ class Stream implements StreamInterface
     protected $size;
     protected $isPipe;
 
-    private static $readWriteHash = [
+    const READ_WRITE_HASH = [
         'read' => [
             'r' => true, 'w+' => true, 'r+' => true, 'x+' => true, 'c+' => true,
             'rb' => true, 'w+b' => true, 'r+b' => true, 'x+b' => true,
@@ -33,31 +33,31 @@ class Stream implements StreamInterface
 
     public function __construct($stream = null, $options = [])
     {
-        if ($stream == null) {
-            $stream = fopen("php://memory", "r+");
+        if ($stream === null) {
+            $stream = fopen("php://memory", "a+");
         } elseif (is_string($stream)) {
             $str = $stream;
-            $stream = fopen("php://memory", "r+");
+            $stream = fopen("php://memory", "a+");
             fwrite($stream, $str);
         }
 
         if (!is_resource($stream)) {
             throw new \InvalidArgumentException('Stream must be a resource');
         }
+
         if (isset($options['size'])) {
             $this->size = $options['size'];
         }
-        $this->customMetadata = isset($options['metadata'])
-            ? $options['metadata']
-            : [];
+
         $this->stream = $stream;
         $meta = stream_get_meta_data($this->stream);
         $this->seekable = $meta['seekable'];
-        $this->readable = isset(self::$readWriteHash['read'][$meta['mode']]);
-        $this->writable = isset(self::$readWriteHash['write'][$meta['mode']]);
+        $this->readable = isset(self::READ_WRITE_HASH["read"][$meta['mode']]);
+        $this->writable = isset(self::READ_WRITE_HASH["write"][$meta['mode']]);
         $this->uri = $this->getMetadata('uri');
+        $mode = fstat($this->stream)["mode"];
+        $this->isPipe = ($mode & 0010000) !== 0;
     }
-
 
     public function __toString()
     {
@@ -66,16 +66,21 @@ class Stream implements StreamInterface
         }
         try {
             $this->rewind();
+        } catch (RuntimeException $e) {
+        }
+
+        try {
             return $this->getContents();
         } catch (RuntimeException $e) {
-            return '';
         }
+
+        return "";
     }
 
     public function close()
     {
-        if ($this->isAttached() === true) {
-            if ($this->isPipe()) {
+        if ($this->stream) {
+            if ($this->isPipe) {
                 pclose($this->stream);
             } else {
                 fclose($this->stream);
@@ -123,7 +128,7 @@ class Stream implements StreamInterface
 
     public function tell()
     {
-        if (!$this->isAttached() || ($position = ftell($this->stream)) === false || $this->isPipe()) {
+        if (!$this->stream || ($position = ftell($this->stream)) === false || $this->isPipe) {
             throw new RuntimeException('Could not get the position of the pointer in stream');
         }
         return $position;
@@ -131,18 +136,11 @@ class Stream implements StreamInterface
 
     public function eof()
     {
-        return $this->isAttached() ? feof($this->stream) : true;
+        return $this->stream ? feof($this->stream) : true;
     }
 
     public function isSeekable()
     {
-        if ($this->seekable === null) {
-            $this->seekable = false;
-            if ($this->isAttached()) {
-                $meta = $this->getMetadata();
-                $this->seekable = !$this->isPipe() && $meta['seekable'];
-            }
-        }
         return $this->seekable;
     }
 
@@ -161,22 +159,12 @@ class Stream implements StreamInterface
             throw new RuntimeException('Could not rewind stream');
         }
     }
+
     public function isWritable()
     {
-        if ($this->writable === null) {
-            $this->writable = false;
-            if ($this->isAttached()) {
-                $meta = $this->getMetadata();
-                foreach (self::$modes['writable'] as $mode) {
-                    if (strpos($meta['mode'], $mode) === 0) {
-                        $this->writable = true;
-                        break;
-                    }
-                }
-            }
-        }
         return $this->writable;
     }
+
     public function write($string)
     {
         if (!$this->isWritable() || ($written = fwrite($this->stream, $string)) === false) {
@@ -186,26 +174,12 @@ class Stream implements StreamInterface
         $this->size = null;
         return $written;
     }
+
     public function isReadable()
     {
-        if ($this->readable === null) {
-            if ($this->isPipe()) {
-                $this->readable = true;
-            } else {
-                $this->readable = false;
-                if ($this->isAttached()) {
-                    $meta = $this->getMetadata();
-                    foreach (self::$modes['readable'] as $mode) {
-                        if (strpos($meta['mode'], $mode) === 0) {
-                            $this->readable = true;
-                            break;
-                        }
-                    }
-                }
-            }
-        }
         return $this->readable;
     }
+
     public function read($length)
     {
         if (!$this->isReadable() || ($data = fread($this->stream, $length)) === false) {
@@ -226,6 +200,7 @@ class Stream implements StreamInterface
         }
         return $contents;
     }
+
     public function getMetadata($key = null)
     {
         $this->meta = stream_get_meta_data($this->stream);

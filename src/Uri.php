@@ -114,7 +114,7 @@ class Uri implements UriInterface
             $query
         );
     }
-    protected function filterPath($path)
+    protected function filterPath($path): string
     {
         return preg_replace_callback(
             '/(?:[^a-zA-Z0-9_\-\.~:@&=\+\$,\/;%]+|%(?![A-Fa-f0-9]{2}))/',
@@ -148,17 +148,15 @@ class Uri implements UriInterface
         $clone->scheme = $scheme;
         return $clone;
     }
+
     public function getAuthority(): string
     {
         $userInfo = $this->getUserInfo();
         $host = $this->getHost();
         $port = $this->getPort();
-        if (($this->port == 80 && $this->scheme == 'http') || ($this->port == 443 && $this->scheme == 'https')) {
-            $port = null;
-        }
-
         return ($userInfo ? $userInfo . '@' : '') . $host . ($port !== null ? ':' . $port : '');
     }
+
     public function getUserInfo(): string
     {
         return $this->user . ($this->password ? ':' . $this->password : '');

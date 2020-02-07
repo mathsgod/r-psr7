@@ -9,6 +9,15 @@ use R\Psr7\Uri;
 
 final class UriTest extends TestCase
 {
+    public function test_getAuthority()
+    {
+        $uri = Uri::createFromString("http://a:b@raymond2.hostlink.com.hk:8080/cms/testing/download");
+        $this->assertEquals("a:b@raymond2.hostlink.com.hk:8080", $uri->getAuthority());
+
+        $uri = Uri::createFromString("http://a:b@raymond2.hostlink.com.hk:80/cms/testing/download");
+        $this->assertEquals("a:b@raymond2.hostlink.com.hk", $uri->getAuthority());
+    }
+
     public function test_getScheme()
     {
 
@@ -30,8 +39,6 @@ final class UriTest extends TestCase
 
         $uri = Uri::createFromString("ftp://raymond2.hostlink.com.hk/cms/testing/download");
         $this->assertNull($uri->getPort());
-
-
     }
 
 
