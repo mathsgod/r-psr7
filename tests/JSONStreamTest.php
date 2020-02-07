@@ -1,5 +1,6 @@
 <?
-declare (strict_types = 1);
+
+declare(strict_types=1);
 //error_reporting(E_ALL && ~E_WARNING);
 use PHPUnit\Framework\TestCase;
 
@@ -16,7 +17,14 @@ final class JSONStreamTest extends TestCase
     public function testToString()
     {
         $s = new JSONStream(["a" => 1]);
-        $this->assertEquals('{"a":1}', (string)$s);
+        $this->assertEquals('{"a":1}', (string) $s);
     }
 
+
+    public function testToWrite()
+    {
+        $s = new JSONStream(["a" => 1]);
+        $s->write(["b" => 2]);
+        $this->assertEquals('{"b":2}', (string) $s);
+    }
 }

@@ -62,4 +62,13 @@ final class StreamTest extends TestCase
         $s->write("abc");
         $this->assertEquals("testabc", (string) $s);
     }
+
+    public function test_truncate()
+    {
+        $s = new Stream("test");
+        $s->write("abc");
+
+        $s->truncate(1);
+        $this->assertEquals("t", (string) $s);
+    }
 }

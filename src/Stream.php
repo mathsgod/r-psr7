@@ -31,22 +31,18 @@ class Stream implements StreamInterface
         ]
     ];
 
-    public function __construct($stream = null, $options = [])
+    public function __construct($stream = null)
     {
         if ($stream === null) {
-            $stream = fopen("php://memory", "a+");
+            $stream = fopen("php://memory", "r+");
         } elseif (is_string($stream)) {
             $str = $stream;
-            $stream = fopen("php://memory", "a+");
+            $stream = fopen("php://memory", "r+");
             fwrite($stream, $str);
         }
 
         if (!is_resource($stream)) {
             throw new \InvalidArgumentException('Stream must be a resource');
-        }
-
-        if (isset($options['size'])) {
-            $this->size = $options['size'];
         }
 
         $this->stream = $stream;
@@ -210,7 +206,10 @@ class Stream implements StreamInterface
         return isset($this->meta[$key]) ? $this->meta[$key] : null;
     }
 
-    public function truncate($size)
+    /**
+     * Truncates a stream to a given length
+     */
+    public function truncate(int $size)
     {
         return ftruncate($this->stream, $size);
     }

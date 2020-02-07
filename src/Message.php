@@ -46,12 +46,6 @@ class Message implements MessageInterface
 
     public function withProtocolVersion($version)
     {
-        /*        if (!isset(self::$validProtocolVersions[$version])) {
-        throw new InvalidArgumentException(
-            'Invalid HTTP version. Must be one of: '
-            . implode(', ', array_keys(self::$validProtocolVersions))
-        );
-        }*/
         $clone = clone $this;
         $clone->protocolVersion = $version;
         return $clone;

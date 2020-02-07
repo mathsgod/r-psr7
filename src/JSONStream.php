@@ -4,32 +4,16 @@ namespace R\Psr7;
 
 class JSONStream extends Stream
 {
-    protected $_data = null;
-
     public function __construct($data = null, $options = [])
     {
-        $this->_data = $data;
-        parent::__construct(fopen("php://memory", "r+"), $options);
+        parent::__construct();
+        $this->seekable = false;
+        parent::write(json_encode($data, JSON_UNESCAPED_UNICODE));
     }
 
     public function write($obj)
     {
-        $this->_data = $obj;
-    }
-
-    public function getContents()
-    {
-        return $this->_data;
-    }
-
-    public function __toString()
-    {
-        parent::truncate($this->getSize());
-        return json_encode($this->_data, JSON_UNESCAPED_UNICODE);
-    }
-
-    public function truncate($size)
-    {
-        $this->_data = null;
+        parent::truncate(0);
+        return parent::write(json_encode($obj, JSON_UNESCAPED_UNICODE));
     }
 }
