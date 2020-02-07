@@ -9,6 +9,32 @@ use R\Psr7\Uri;
 
 final class UriTest extends TestCase
 {
+    public function test_getScheme()
+    {
+
+        $uri = Uri::createFromString("http://raymond2.hostlink.com.hk/cms/testing/download");
+        $this->assertEquals("http", $uri->getScheme());
+    }
+
+    public function test_getPort()
+    {
+
+        $uri = Uri::createFromString("http://raymond2.hostlink.com.hk/cms/testing/download");
+        $this->assertNull($uri->getPort());
+
+        $uri = Uri::createFromString("http://raymond2.hostlink.com.hk:80/cms/testing/download");
+        $this->assertNull($uri->getPort());
+
+        $uri = Uri::createFromString("raymond2.hostlink.com.hk/cms/testing/download");
+        $this->assertNull($uri->getPort());
+
+        $uri = Uri::createFromString("ftp://raymond2.hostlink.com.hk/cms/testing/download");
+        $this->assertNull($uri->getPort());
+
+
+    }
+
+
     public function test_withPath()
     {
         $uri = Uri::createFromString("http://raymond2.hostlink.com.hk/cms/testing/download");

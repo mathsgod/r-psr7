@@ -16,92 +16,84 @@ class Uri implements UriInterface
     protected $query = '';
     protected $fragment = '';
 
-    public function __construct(
-        string $scheme,
-        $host,
-        $port = null,
-        $path = '',
-        $query = '',
-        $fragment = '',
-        $user,
-        $password
-    ) {
-        $this->scheme = $this->filterScheme($scheme);
-        $this->host = $host;
-        $this->port = $this->filterPort($port);
-        $this->path = $this->filterPath($path);
-        $this->query = $this->filterQuery($query);
-        $this->fragment = $this->filterQuery($fragment);
-        $this->user = $user;
-        $this->password = $password;
+    const DEFAULT_PORTS = [
+        'http'  => 80,
+        'https' => 443,
+        'ftp' => 21,
+        'gopher' => 70,
+        'nntp' => 119,
+        'news' => 119,
+        'telnet' => 23,
+        'tn3270' => 23,
+        'imap' => 143,
+        'pop' => 110,
+        'ldap' => 389,
+    ];
+
+    public function __construct(string $uri = '')
+    {
+        if ($uri !== '') {
+            $parts = parse_url($uri);
+
+            $this->scheme = $parts["scheme"] ? $this->filterScheme($parts["scheme"]) : '';
+            $this->host = $parts["host"] ? $this->filterHost($parts["host"]) : '';
+            $this->port = $parts["port"] ? $this->filterPort($parts["port"]) : null;
+            $this->path = $this->filterPath($parts["path"]);
+            $this->query = $this->filterQuery($parts["query"]);
+            $this->fragment = $this->filterQuery($parts["fragment"]);
+            $this->user = $parts["user"];
+            $this->password = $parts["pass"];
+        }
     }
 
+    protected function filterHost(string $host)
+    {
+        return strtolower($host);
+    }
+
+    /**
+     * @deprecated 
+     */
     public static function CreateFromString(string $uri): self
     {
-        $parts = parse_url($uri);
-        $scheme = $parts['scheme'] ?? null;
-        $user = $parts['user'] ?? null;
-        $pass = $parts['pass'] ?? null;
-        $host = $parts['host'] ?? '';
-        $port = $parts['port'] ?? null;
-        $path = $parts['path'] ?? '';
-        $query = $parts['query'] ?? '';
-        $fragment = $parts['fragment'] ?? '';
-
-        return new static($scheme, $host, $port, $path, $query, $fragment, $user, $pass);
+        return new self($uri);
     }
 
     public static function CreateFromEnvironment(array $env)
     {
+        $url = "";
         // Scheme
         $isSecure = isset($env["HTTPS"]) ? $env["HTTPS"] : null;
         $scheme = (empty($isSecure) || $isSecure === 'off') ? 'http' : 'https';
         // Authority: Username and password
         $username = $env['PHP_AUTH_USER'];
         $password = $env['PHP_AUTH_PW'];
+
+        $url = $scheme . "://";
+
         // Authority: Host
         if ($env['HTTP_HOST']) {
             $host = $env['HTTP_HOST'];
         } else {
             $host = $env['SERVER_NAME'];
         }
+
+        $url .= $host;
+
         // Authority: Port
         $port = (int) $env['SERVER_PORT'];
-        if (preg_match('/^(\[[a-fA-F0-9:.]+\])(:\d+)?\z/', $host, $matches)) {
-            $host = $matches[1];
-            if (isset($matches[2])) {
-                $port = (int) substr($matches[2], 1);
-            }
-        } else {
-            $pos = strpos($host, ':');
-            if ($pos !== false) {
-                $port = (int) substr($host, $pos + 1);
-                $host = strstr($host, ':', true);
-            }
-        }
-        if ($port == 0) {
-            $port = null;
-        }
+        $url .= ":$port";
 
         $basePath = dirname($env["SCRIPT_NAME"]);
         if ($basePath == DIRECTORY_SEPARATOR) {
             $basePath = "";
         }
 
-        $requestUri = parse_url('http://example.com' . $env['REQUEST_URI'], PHP_URL_PATH);
+        $url .= $env["REQUEST_URI"];
 
-        $virtualPath = substr($requestUri, strlen($basePath));
-
-        // Query string
-        $queryString = $env['QUERY_STRING'] ?? '';
-        if ($queryString === '') {
-            $queryString = parse_url('http://example.com' . $env['REQUEST_URI'], PHP_URL_QUERY);
-        }
-        // Fragment
-        $fragment = '';
-        // Build Uri
-        $uri = new static($scheme, $host, $port, $virtualPath, $queryString, $fragment, $username, $password);
+        $uri = new static($url);
         $uri = $uri->withBasePath($basePath);
+        $uri = $uri->withPath($uri->getPath());
         return $uri;
     }
 
@@ -145,15 +137,7 @@ class Uri implements UriInterface
 
     protected function filterScheme(string $scheme): string
     {
-        static $valid = [
-            '' => true,
-            'https' => true,
-            'http' => true,
-        ];
         $scheme = str_replace('://', '', strtolower((string) $scheme));
-        if (!isset($valid[$scheme])) {
-            throw new InvalidArgumentException('Uri scheme must be one of: "", "https", "http"');
-        }
         return $scheme;
     }
 
@@ -196,7 +180,7 @@ class Uri implements UriInterface
     public function withHost($host): self
     {
         $clone = clone $this;
-        $clone->host = $host;
+        $clone->host = $this->filterHost($host);
         return $clone;
     }
 
@@ -207,7 +191,10 @@ class Uri implements UriInterface
 
     public function getPort()
     {
-        return $this->port;
+        if ($this->port) {
+            return ($this->port == self::DEFAULT_PORTS[$this->getScheme()]) ? null : $this->port;
+        }
+        return null;
     }
 
     public function getPath(): string
@@ -227,9 +214,8 @@ class Uri implements UriInterface
 
     public function withPort($port): self
     {
-        $port = $this->filterPort($port);
         $clone = clone $this;
-        $clone->port = $port;
+        $clone->port = $this->filterPort($port);
         return $clone;
     }
 
@@ -254,6 +240,7 @@ class Uri implements UriInterface
         $clone->path = $this->filterPath($path);
         return $clone;
     }
+
     public function withQuery($query): self
     {
         if (!is_string($query) && !method_exists($query, '__toString')) {
