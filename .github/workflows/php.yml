@@ -1,4 +1,4 @@
-name: PHP Composer
+name: PHP Unit
 
 on: [push]
 
@@ -21,3 +21,14 @@ jobs:
 
     # - name: Run test suite
     #   run: composer run-script test
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '7.0'
+        extensions: mbstring, intl
+        ini-values: post_max_size=256M, short_open_tag=On
+        coverage: xdebug    
+        tools: php-cs-fixer, phpunit
+
+    - name: Run test suite
+      run: vendor/bin/phpunit tests
