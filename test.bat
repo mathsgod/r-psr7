@@ -1,1 +1,1 @@
-vendor\bin\phpunit --bootstrap vendor\autoload.php tests --verbose
+vendor\bin\phpunit tests
