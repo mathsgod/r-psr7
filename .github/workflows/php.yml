@@ -1,4 +1,4 @@
-name: PHP Unit
+name: PHP Unit Test
 
 on: [push]
 
