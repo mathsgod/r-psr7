@@ -2,7 +2,9 @@
 
 namespace R\Psr7;
 
-class ObjectStream extends Stream
+use Psr\Http\Message\StreamInterface;
+
+class ObjectStream extends Stream implements StreamInterface
 {
     protected $_data = [];
 
@@ -20,7 +22,7 @@ class ObjectStream extends Stream
         return parent::getContents();
     }
 
-    public function truncate()
+    public function truncate(int $size)
     {
         $this->_data = [];
         return true;

@@ -3,8 +3,9 @@
 namespace R\Psr7;
 
 use PHP\Psr7\Uri as Psr7Uri;
+use Psr\Http\Message\UriInterface;
 
-class Uri extends Psr7Uri
+class Uri extends Psr7Uri implements UriInterface
 {
     protected $basePath = '';
 

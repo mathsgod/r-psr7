@@ -2,7 +2,9 @@
 
 namespace R\Psr7;
 
-class JSONStream extends Stream
+use Psr\Http\Message\StreamInterface;
+
+class JSONStream extends Stream implements StreamInterface
 {
     public function __construct($data = null, $options = [])
     {

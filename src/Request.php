@@ -2,10 +2,9 @@
 
 namespace R\Psr7;
 
-use \InvalidArgumentException;
 use PHP\Psr7\RequestTrait;
 use \Psr\Http\Message\RequestInterface;
-use \Psr\Http\Message\UriInterface;
+
 
 class Request extends Message implements RequestInterface
 {
