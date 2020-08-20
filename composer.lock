@@ -4,15 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bbaa0120234e49fdcb2f879f97020f1b",
+    "content-hash": "feca808111fdb7ec6d1c1880047f9883",
     "packages": [
         {
             "name": "mathsgod/php-psr7",
-            "version": "dev-master",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mathsgod/php-psr7.git",
+                "reference": "61cd9569bccace308cfde49a93587a0b0b97fbad"
+            },
             "dist": {
-                "type": "path",
-                "url": "../php-psr7",
-                "reference": "d3ba480ad9c3d22330d41b7daef969eee6950026"
+                "type": "zip",
+                "url": "https://api.github.com/repos/mathsgod/php-psr7/zipball/61cd9569bccace308cfde49a93587a0b0b97fbad",
+                "reference": "61cd9569bccace308cfde49a93587a0b0b97fbad",
+                "shasum": ""
             },
             "require": {
                 "php": ">=7.0",

@@ -25,5 +25,8 @@
     },
     "type": "library",
     "license": "proprietary",
-    "minimum-stability": "stable"
+    "minimum-stability": "stable",
+    "scripts": {
+        "test": "phpunit tests"
+    }
 }

@@ -132,7 +132,7 @@ final class UriTest extends TestCase
         $env["REQUEST_URI"] = "/cms/Testing/a";
         $env["SCRIPT_NAME"] = "/cms/index.php";
 
-        $uri = Uri::createFromEnvironment($env);
+        $uri = Uri::CreateFromEnvironment($env);
 
         $this->assertEquals("/cms", $uri->getBasePath());
         $this->assertEquals("/Testing/a", $uri->getPath());

@@ -84,8 +84,8 @@ final class MessageTest extends TestCase
      */
     public function test_getHeaders()
     {
-        $r = new Message(["a" => 1, "b" => 2]);
-        $this->assertEquals($r->getHeaders(), ["a" => [1], "b" => [2]]);
+        $r = new Message(["a" => "1", "b" => "2"]);
+        $this->assertEquals($r->getHeaders(), ["a" => ["1"], "b" => ["2"]]);
     }
 
     /**
@@ -125,15 +125,15 @@ final class MessageTest extends TestCase
      */
     public function test_getHeader()
     {
-        $r = new Message(["a" => 1, "b" => 2]);
-        $this->assertEquals($r->getHeader("a"), [1]);
-        $this->assertEquals($r->getHeader("b"), [2]);
-        $this->assertEquals($r->getHeader("A"), [1]);
-        $this->assertEquals($r->getHeader("B"), [2]);
+        $r = new Message(["a" => "1", "b" => "2"]);
+        $this->assertEquals($r->getHeader("a"), ["1"]);
+        $this->assertEquals($r->getHeader("b"), ["2"]);
+        $this->assertEquals($r->getHeader("A"), ["1"]);
+        $this->assertEquals($r->getHeader("B"), ["2"]);
 
 
-        $r = new Message(["a" => 1, "A" => 2]);
-        $this->assertEquals($r->getHeader("a"), [1, 2]);
+        $r = new Message(["a" => "1", "A" => "2"]);
+        $this->assertEquals($r->getHeader("a"), ["2"]);
     }
 
 
@@ -217,13 +217,13 @@ final class MessageTest extends TestCase
     {
         $r = new Message();
 
-        $r = $r->withAddedHeader("a", 1);
-        $r = $r->withAddedHeader("a", 2);
-        $r = $r->withAddedHeader("A", 3);
+        $r = $r->withAddedHeader("a", "1");
+        $r = $r->withAddedHeader("a", "2");
+        $r = $r->withAddedHeader("A", "3");
 
-        $this->assertEquals($r->getHeaders(), ["a" => [1, 2], "A" => [3]]);
+        $this->assertEquals($r->getHeaders(), ["a" => ["1", "2","3"]]);
 
-        $this->assertEquals($r->getHeader('a'), [1, 2, 3]);
+        $this->assertEquals($r->getHeader('a'), ["1", "2", "3"]);
     }
 
     /**
