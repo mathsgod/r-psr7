@@ -3,11 +3,12 @@
 namespace R\Psr7;
 
 use PHP\Psr7\ServerRequest as Psr7ServerRequest;
-use \Psr\Http\Message\ServerRequestInterface;
 
+/**
+ * @method Uri getUri
+ */
 class ServerRequest extends Psr7ServerRequest
 {
-
     public static function FromEnv()
     {
         $request = new self();
@@ -18,6 +19,9 @@ class ServerRequest extends Psr7ServerRequest
                 break;
             }
         }
+
+        $uri = Uri::CreateFromEnvironment($_SERVER);
+        $request = $request->withUri($uri);
 
         return $request;
     }
