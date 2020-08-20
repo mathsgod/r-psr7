@@ -19,4 +19,8 @@ class Message extends Psr7Message
         $this->protocolVersion = $version;
     }
     
+    public function __toString()
+    {
+        return (string)$this->body;
+    }
 }
