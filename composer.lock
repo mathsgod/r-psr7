@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a39de503c9e4167d9225af8e96557ecb",
+    "content-hash": "feca808111fdb7ec6d1c1880047f9883",
     "packages": [
         {
             "name": "mathsgod/php-psr7",
-            "version": "dev-master",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mathsgod/php-psr7.git",
-                "reference": "5f57e7f92be47e12b6176538ad8aabbecba49202"
+                "reference": "dafb5360d402fd2ddc3663f6d8827025859f21b6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mathsgod/php-psr7/zipball/5f57e7f92be47e12b6176538ad8aabbecba49202",
-                "reference": "5f57e7f92be47e12b6176538ad8aabbecba49202",
+                "url": "https://api.github.com/repos/mathsgod/php-psr7/zipball/dafb5360d402fd2ddc3663f6d8827025859f21b6",
+                "reference": "dafb5360d402fd2ddc3663f6d8827025859f21b6",
                 "shasum": ""
             },
             "require": {
@@ -47,7 +47,7 @@
                 }
             ],
             "description": "A standard implementation of php psr7",
-            "time": "2020-08-20T03:02:15+00:00"
+            "time": "2020-08-20T04:13:51+00:00"
         },
         {
             "name": "psr/http-message",
@@ -1618,9 +1618,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "mathsgod/php-psr7": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
