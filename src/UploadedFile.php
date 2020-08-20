@@ -8,12 +8,4 @@ use Psr\Http\Message\UploadedFileInterface;
 
 class UploadedFile extends Psr7UploadedFile implements UploadedFileInterface
 {
-    public function __construct(StreamInterface $stream, $size, $error, string $clientFilename = null, string $clientMediaType = null)
-    {
-        $this->stream = $stream;
-        $this->size = $size;
-        $this->error = $error;
-        $this->clientFilename = $clientFilename;
-        $this->clientMediaType = $clientMediaType;
-    }
 }

@@ -32,12 +32,11 @@ class Request extends Message implements RequestInterface
 
     public function ContentType()
     {
-        $s = explode(";", $this->serverParams["CONTENT_TYPE"]);
-
+        $s = explode(";", $this->getHeader("Content-Type")[0]);
         return strtolower($s[0]);
     }
 
-    public function isAccept($content_type)
+    public function isAccept(string $content_type)
     {
         foreach ($this->HttpAccept() as $accept) {
             if ($accept["media"] == $content_type) {
