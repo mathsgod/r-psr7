@@ -5,6 +5,9 @@ namespace R\Psr7;
 use \Psr\Http\Message\ServerRequestInterface;
 use \PHP\Psr7\ServerRequestTrait;
 
+/**
+ * @method Uri getUri
+ */
 class ServerRequest extends Request implements ServerRequestInterface
 {
     use ServerRequestTrait;
@@ -19,6 +22,9 @@ class ServerRequest extends Request implements ServerRequestInterface
                 break;
             }
         }
+
+        $uri = Uri::CreateFromEnvironment($_SERVER);
+        $request = $request->withUri($uri);
 
         return $request;
     }
