@@ -4,8 +4,51 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9fbd96a574011f99743933781d12c84e",
+    "content-hash": "a39de503c9e4167d9225af8e96557ecb",
     "packages": [
+        {
+            "name": "mathsgod/php-psr7",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mathsgod/php-psr7.git",
+                "reference": "5f57e7f92be47e12b6176538ad8aabbecba49202"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mathsgod/php-psr7/zipball/5f57e7f92be47e12b6176538ad8aabbecba49202",
+                "reference": "5f57e7f92be47e12b6176538ad8aabbecba49202",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0",
+                "psr/http-message": "^1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PHP\\Psr7\\": "src/"
+                },
+                "files": [
+                    "function/function.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Raymond Chong",
+                    "email": "mathsgod@yahoo.com"
+                }
+            ],
+            "description": "A standard implementation of php psr7",
+            "time": "2020-08-20T03:02:15+00:00"
+        },
         {
             "name": "psr/http-message",
             "version": "1.0.1",
@@ -720,6 +763,7 @@
             "keywords": [
                 "tokenizer"
             ],
+            "abandoned": true,
             "time": "2017-11-27T05:48:46+00:00"
         },
         {
@@ -1574,11 +1618,14 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "mathsgod/php-psr7": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
         "php": ">=7.0"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
 }
