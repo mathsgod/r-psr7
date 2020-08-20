@@ -4,8 +4,51 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9fbd96a574011f99743933781d12c84e",
+    "content-hash": "bbaa0120234e49fdcb2f879f97020f1b",
     "packages": [
+        {
+            "name": "mathsgod/php-psr7",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "../php-psr7",
+                "reference": "d3ba480ad9c3d22330d41b7daef969eee6950026"
+            },
+            "require": {
+                "php": ">=7.0",
+                "psr/http-message": "^1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PHP\\Psr7\\": "src/"
+                },
+                "files": [
+                    "function/function.php"
+                ]
+            },
+            "scripts": {
+                "test": [
+                    "phpunit tests"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Raymond Chong",
+                    "email": "mathsgod@yahoo.com"
+                }
+            ],
+            "description": "A standard implementation of php psr7",
+            "transport-options": {
+                "relative": true
+            }
+        },
         {
             "name": "psr/http-message",
             "version": "1.0.1",
@@ -720,6 +763,7 @@
             "keywords": [
                 "tokenizer"
             ],
+            "abandoned": true,
             "time": "2017-11-27T05:48:46+00:00"
         },
         {
@@ -1574,11 +1618,14 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "mathsgod/php-psr7": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
         "php": ">=7.0"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
 }
