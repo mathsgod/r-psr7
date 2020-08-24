@@ -2,15 +2,15 @@
 
 namespace R\Psr7;
 
+use PHP\Psr7\ServerRequest as Psr7ServerRequest;
 use \Psr\Http\Message\ServerRequestInterface;
 use \PHP\Psr7\ServerRequestTrait;
 
 /**
  * @method Uri getUri
  */
-class ServerRequest extends Request implements ServerRequestInterface
+class ServerRequest extends Psr7ServerRequest implements ServerRequestInterface
 {
-    use ServerRequestTrait;
 
     public static function FromEnv()
     {

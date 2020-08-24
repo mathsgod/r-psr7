@@ -2,21 +2,12 @@
 
 namespace R\Psr7;
 
-use PHP\Psr7\RequestTrait;
+use PHP\Psr7\Request as Psr7Request;
 use \Psr\Http\Message\RequestInterface;
 
 
-class Request extends Message implements RequestInterface
+class Request extends Psr7Request implements RequestInterface
 {
-    use RequestTrait;
-
-    public function __construct(string $method, Uri $uri, array $headers = [], $body = null, $version = '1.1')
-    {
-        $this->method = $method;
-        $this->uri = $uri;
-
-        parent::__construct($headers, $body, $version);
-    }
 
     //-----
     public function HttpAccept()

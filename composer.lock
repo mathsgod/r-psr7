@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "mathsgod/php-psr7",
-            "version": "1.0.6",
+            "version": "1.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mathsgod/php-psr7.git",
-                "reference": "a291a11476dda87abad8510b1142ff7f1116f531"
+                "reference": "31be59f6a2f18d6477dc8b45541aa307f97a896b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mathsgod/php-psr7/zipball/a291a11476dda87abad8510b1142ff7f1116f531",
-                "reference": "a291a11476dda87abad8510b1142ff7f1116f531",
+                "url": "https://api.github.com/repos/mathsgod/php-psr7/zipball/31be59f6a2f18d6477dc8b45541aa307f97a896b",
+                "reference": "31be59f6a2f18d6477dc8b45541aa307f97a896b",
                 "shasum": ""
             },
             "require": {
@@ -47,7 +47,7 @@
                 }
             ],
             "description": "A standard implementation of php psr7",
-            "time": "2020-08-20T08:35:08+00:00"
+            "time": "2020-08-20T08:35:43+00:00"
         },
         {
             "name": "psr/http-message",
