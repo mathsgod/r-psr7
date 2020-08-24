@@ -25,6 +25,6 @@ final class JSONStreamTest extends TestCase
     {
         $s = new JSONStream(["a" => 1]);
         $s->write(["b" => 2]);
-        $this->assertEquals('{"b":2}', (string) $s);
+        $this->assertEquals('{"a":1,"b":2}', (string) $s);
     }
 }
