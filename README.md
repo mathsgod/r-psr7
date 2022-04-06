@@ -1,4 +1,4 @@
-![PHP Composer](https://github.com/mathsgod/r-psr7/workflows/PHP%20Unit%20Test/badge.svg)
+[![PHP Composer](https://github.com/mathsgod/r-psr7/actions/workflows/php.yml/badge.svg)](https://github.com/mathsgod/r-psr7/actions/workflows/php.yml)
 
 
 ## hostlink/r-psr7
